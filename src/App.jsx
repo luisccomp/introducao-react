@@ -1,5 +1,6 @@
 import './App.css';
 
+// Todo componente deve começar com letra maiuscula
 function App() {
 
     const items = [
@@ -86,10 +87,14 @@ function App() {
         }
     ];
 
+    const shopName = 'Jersey Shop Made with React JS';
+
+    // Eh importante que todos os elementos de um componente estejam dentro de um unico componente raiz.
+    // Pode ser dentro de um unico div ou dentro de um React Fragment <>...</>
     return ( 
         <>
             <section className="items">
-                <h4>Jersey Shop Made with React JS</h4>
+                <h4>{shopName}</h4>
                 
                 <div className="product selected">
                     <div className="photo">
