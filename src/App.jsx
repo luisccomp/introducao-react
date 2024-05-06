@@ -1,249 +1,142 @@
+import { useState } from 'react';
 import './App.css';
+import Item from './components/Item';
+import OrderDetails from './components/OrderDetails';
 
+// Todo componente deve começar com letra maiuscula
 function App() {
+    const shopName = 'Jersey Shop Made with React JS';
 
-    const items = [
-        {
-            
-            id: 1, 
-            photo: "real_madrid.webp",
-            name: "Real Madrid",
-            price: 119.99,
-            active: false,
-            quantity: 1, 
-            isInBag: false
-        },
-        {
-            id: 2, 
-            photo: "milan.png",
-            name: "Milan",
-            price: 99.99,
-            active: false,
-            quantity: 1, 
-            isInBag: false
-        },
-        {
-            id: 3, 
-            photo: "chelsea.webp",
-            name: "Chelsea",
-            price: 99.99,
-            active: false,
-            quantity: 1, 
-            isInBag: false
-        },
-        {
-            id: 4, 
-            photo: "barcelona.png",
-            name: "Barcelona",
-            price: 109.99,
-            active: false,
-            quantity: 1, 
-            isInBag: false
-        },
-        {
-            id: 5, photo: "benfica.png",
-            name: "Benfica",
-            price: 89.49,
-            active: false,
-            quantity: 1, 
-            isInBag: false
-        },
-        {
-            id: 6, 
-            photo: "manchester.webp",
-            name: "Manchester City",
-            price: 129.79,
-            active: false,
-            quantity: 1, 
-            isInBag: false
-        },
-        {
-            id: 7, 
-            photo: "bayern.webp",
-            name: "Bayern",
-            price: 119.99,
-            active: false,
-            quantity: 1, 
-            isInBag: false
-        },
-        {
-            id: 8, 
-            photo: "psg.png",
-            name: "PSG",
-            price: 94.99,
-            active: false,
-            quantity: 1, 
-            isInBag: false
-        },
-        {
-            id: 9, 
-            photo: "ajax.webp",
-            name: "Ajax",
-            price: 89.99,
-            active: false,
-            quantity: 1, 
-            isInBag: false
-        }
-    ];
+    const [items, setItems] = useState(
+        [
+            {
+                
+                id: 1, 
+                photo: "real_madrid.webp",
+                name: "Real Madrid",
+                price: 119.99,
+                active: false,
+                quantity: 1, 
+                isInBag: false
+            },
+            {
+                id: 2, 
+                photo: "milan.png",
+                name: "Milan",
+                price: 99.99,
+                active: false,
+                quantity: 1, 
+                isInBag: false
+            },
+            {
+                id: 3, 
+                photo: "chelsea.webp",
+                name: "Chelsea",
+                price: 99.99,
+                active: false,
+                quantity: 1, 
+                isInBag: false
+            },
+            {
+                id: 4, 
+                photo: "barcelona.png",
+                name: "Barcelona",
+                price: 109.99,
+                active: false,
+                quantity: 1, 
+                isInBag: false
+            },
+            {
+                id: 5, photo: "benfica.png",
+                name: "Benfica",
+                price: 89.49,
+                active: false,
+                quantity: 1, 
+                isInBag: false
+            },
+            {
+                id: 6, 
+                photo: "manchester.webp",
+                name: "Manchester City",
+                price: 129.79,
+                active: false,
+                quantity: 1, 
+                isInBag: false
+            },
+            {
+                id: 7, 
+                photo: "bayern.webp",
+                name: "Bayern",
+                price: 119.99,
+                active: false,
+                quantity: 1, 
+                isInBag: false
+            },
+            {
+                id: 8, 
+                photo: "psg.png",
+                name: "PSG",
+                price: 94.99,
+                active: false,
+                quantity: 1, 
+                isInBag: false
+            },
+            {
+                id: 9, 
+                photo: "ajax.webp",
+                name: "Ajax",
+                price: 89.99,
+                active: false,
+                quantity: 1, 
+                isInBag: false
+            }
+        ]
+    );
 
+    const itensInBag = items.filter(item => item.isInBag);
+    const hasItemsInBag = itensInBag.length > 0;
+
+    const handleSelectItem = id => {
+        setItems(items.map(item => item.id === id ? { ...item, isInBag: !item.isInBag } : item));
+    };
+
+    const handleOnChangeQuantity = (e, id, increment) => {
+        e.stopPropagation();
+        
+        // Alterar o item diretamente dentro do array n altera o estado da página
+        // eh necessario fazer a chamada no setItems e realizar essa alteração
+        setItems(items.map(item => {
+            if (item.id === id) {
+                const quantity = item.quantity + increment <= 1 ? 1 : item.quantity + increment;
+
+                return { ...item, quantity };
+            }
+
+            return item;
+        }));
+    };
+
+    // Eh importante que todos os elementos de um componente estejam dentro de um unico componente raiz.
+    // Pode ser dentro de um unico div ou dentro de um React Fragment <>...</>
+
+    // Sempre que o meu componente receber um ID como parâmetro, é importante que ele seja declarado como uma
+    // arrow function com todos os parametros
     return ( 
         <>
             <section className="items">
-                <h4>Jersey Shop Made with React JS</h4>
+                <h4>{shopName}</h4>
                 
-                <div className="product selected">
-                    <div className="photo">
-                        <img src="././img/real_madrid.webp" />
-                    </div>
-                    <div className="description">
-                        <span className="name">Real Madrid</span>
-                        <span className="price">$ 119.99</span>
-                        <div className="quantity-area">
-                            <button>-</button>
-                            <span className="quantity">1</span>
-                            <button>+</button>
-                        </div>
-                    </div>
-                </div>
-                <div className="product">
-                    <div className="photo">
-                        <img src="./img/milan.png" />
-                    </div>
-                    <div className="description">
-                        <span className="name">Milan</span>
-                        <span className="price">$ 99.99</span>
-                        <div className="quantity-area">
-                            <button>-</button>
-                            <span className="quantity">1</span>
-                            <button>+</button>
-                        </div>
-                    </div>
-                </div>
-                <div className="product">
-                    <div className="photo">
-                        <img src="./img/chelsea.webp" />
-                    </div>
-                    <div className="description">
-                        <span className="name">Chelsea</span>
-                        <span className="price">$ 99.99</span>
-                        <div className="quantity-area">
-                            <button>-</button>
-                            <span className="quantity">1</span>
-                            <button>+</button>
-                        </div>
-                    </div>
-                </div>
-                <div className="product">
-                    <div className="photo">
-                        <img src="./img/barcelona.png" />
-                    </div>
-                    <div className="description">
-                        <span className="name">Barcelona</span>
-                        <span className="price">$ 109.99</span>
-                        <div className="quantity-area">
-                            <button>-</button>
-                            <span className="quantity">1</span>
-                            <button>+</button>
-                        </div>
-                    </div>
-                </div>
-                <div className="product">
-                    <div className="photo">
-                        <img src="./img/benfica.png" />
-                    </div>
-                    <div className="description">
-                        <span className="name">Benfica</span>
-                        <span className="price">$ 89.49</span>
-                        <div className="quantity-area">
-                            <button>-</button>
-                            <span className="quantity">1</span>
-                            <button>+</button>
-                        </div>
-                    </div>
-                </div>
-                <div className="product">
-                    <div className="photo">
-                        <img src="./img/manchester.webp" />
-                    </div>
-                    <div className="description">
-                        <span className="name">Manchester City</span>
-                        <span className="price">$ 129.79</span>
-                        <div className="quantity-area">
-                            <button>-</button>
-                            <span className="quantity">1</span>
-                            <button>+</button>
-                        </div>
-                    </div>
-                </div>
-                <div className="product">
-                    <div className="photo">
-                        <img src="./img/bayern.webp" />
-                    </div>
-                    <div className="description">
-                        <span className="name">Bayern</span>
-                        <span className="price">$ 119.99</span>
-                        <div className="quantity-area">
-                            <button>-</button>
-                            <span className="quantity">1</span>
-                            <button>+</button>
-                        </div>
-                    </div>
-                </div>
-                <div className="product">
-                    <div className="photo">
-                        <img src="./img/psg.png" />
-                    </div>
-                    <div className="description">
-                        <span className="name">PSG</span>
-                        <span className="price">$ 94.99</span>
-                        <div className="quantity-area">
-                            <button>-</button>
-                            <span className="quantity">1</span>
-                            <button>+</button>
-                        </div>
-                    </div>
-                </div>
-                
-                <div className="product">
-                    <div className="photo">
-                        <img src="./img/ajax.webp" />
-                    </div>
-                    <div className="description">
-                        <span className="name">Ajax</span>
-                        <span className="price">$ 89.99</span>
-                        <div className="quantity-area">
-                            <button>-</button>
-                            <span className="quantity">1</span>
-                            <button>+</button>
-                        </div>
-                    </div>
-                </div>
-            </section>
-            
+                {items.map(item => 
+                    <Item 
+                        item={item}
+                        key={item.id}
+                        onClick={id => handleSelectItem(id)}
+                        handleOnChangeQuantity={handleOnChangeQuantity}
+                    />
+                )}
+            </section>            
 
-            <section className="summary">
-                <strong>Order Details</strong>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Item</th>
-                            <th>Total</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>1x Real Madrid</td>
-                            <td>$ 119.99</td>
-                        </tr>
-                        
-                        <tr>
-                            <th>Total</th>
-                            <th>$ 119.99</th>
-                        </tr>
-                    </tbody>
-                </table>
-            </section>
-            
+            {hasItemsInBag && <OrderDetails itemsInBag={itensInBag}/>}
         </>
     );
 }
