@@ -93,12 +93,27 @@ function App() {
         ]
     );
 
-    const hasItemsInBag = items.filter(item => item.isInBag).length > 0;
+    const itensInBag = items.filter(item => item.isInBag);
+    const hasItemsInBag = itensInBag.length > 0;
 
     const handleSelectItem = id => {
-        const indexFound = items.findIndex(item => item.id === id);
+        setItems(items.map(item => item.id === id ? { ...item, isInBag: !item.isInBag } : item));
+    };
 
-        setItems(items.map((item, index) => index === indexFound ? { ...item, isInBag: !item.isInBag } : item));
+    const handleOnChangeQuantity = (e, id, increment) => {
+        e.stopPropagation();
+        
+        // Alterar o item diretamente dentro do array n altera o estado da página
+        // eh necessario fazer a chamada no setItems e realizar essa alteração
+        setItems(items.map(item => {
+            if (item.id === id) {
+                const quantity = item.quantity + increment <= 1 ? 1 : item.quantity + increment;
+
+                return { ...item, quantity };
+            }
+
+            return item;
+        }));
     };
 
     // Eh importante que todos os elementos de um componente estejam dentro de um unico componente raiz.
@@ -116,11 +131,12 @@ function App() {
                         item={item}
                         key={item.id}
                         onClick={id => handleSelectItem(id)}
+                        handleOnChangeQuantity={handleOnChangeQuantity}
                     />
                 )}
             </section>            
 
-            {hasItemsInBag && <OrderDetails/>}
+            {hasItemsInBag && <OrderDetails itemsInBag={itensInBag}/>}
         </>
     );
 }

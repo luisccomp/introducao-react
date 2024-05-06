@@ -2,7 +2,7 @@
 // chama props. No React as props sao uma forma de passar informação a um componente. Ex:
 // <Componente prop1='Hello' prop2='World' />
 // const Componente = ({prop1, prop2}) => {...};
-const Item = ({ item, onClick }) => {
+const Item = ({ item, onClick, handleOnChangeQuantity }) => {
     return (
         <>
             <div onClick={() => onClick(item.id)} className={`product ${item.isInBag ? 'selected' : ''}`.trim()}>
@@ -11,13 +11,13 @@ const Item = ({ item, onClick }) => {
                 </div>
                 <div className="description">
                     <span className="name">{item.name}</span>
-                    <span className="price">{item.price}</span>
+                    <span className="price">R$ {item.price}</span>
                     {
                         item.isInBag &&
                         <div className="quantity-area">
-                            <button>-</button>
+                            <button onClick={e => handleOnChangeQuantity(e, item.id, -1)}>-</button>
                             <span className="quantity">{item.quantity}</span>
-                            <button>+</button>
+                            <button onClick={e => handleOnChangeQuantity(e, item.id, +1)}>+</button>
                         </div>
                     }
                 </div>
